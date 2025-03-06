@@ -2,8 +2,6 @@
   <div class="product-details">
     <h2>{{ product.name }}</h2>
     <p class="price">R{{ product.price }}</p>
-
-    <!-- Product Gallery -->
     <div class="product-gallery">
       <img
         v-for="image in productGalleryImages"
@@ -23,10 +21,8 @@ import { useRoute } from 'vue-router';
 
 const store = useStore();
 const route = useRoute();
-
 const productId = route.params.productId;
 
-// Fetch product gallery images when the component is mounted
 onMounted(async () => {
   await store.dispatch('fetchProductGalleryImages', productId);
 });
@@ -37,7 +33,6 @@ const product = computed(() =>
 
 const productGalleryImages = computed(() => store.state.productGalleryImages || []);
 </script>
-
 <style scoped>
 .product-details {
   padding: 20px;

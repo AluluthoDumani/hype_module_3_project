@@ -1,23 +1,11 @@
 <template>
   <div class="product-list">
-    <!-- Loading State -->
-    <div v-if="loading" class="loading">Loading products...</div>
-
-    <!-- Error State -->
-    <div v-if="error" class="error">{{ error }}</div>
-
-    <!-- Product Cards -->
-    <template>
-  <div class="product-list">
     <div v-for="product in products" :key="product.product_id" class="product-card">
       <img :src="getProductImage(product.product_id)" :alt="product.name" class="product-image" />
-      {{ console.log('Product:', product.product_id, 'Image URL:', getProductImage(product.product_id)) }} <!-- ✅ Debug -->
       <h3>{{ product.name }}</h3>
       <p class="price">R{{ product.price }}</p>
       <button @click="goToProduct(product.product_id)">View More</button>
     </div>
-  </div>
-</template>
   </div>
 </template>
 
@@ -26,33 +14,27 @@ import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
-
 const store = useStore();
 const router = useRouter();
 
-// Fetch products and product images when the component is mounted
 onMounted(async () => {
   await store.dispatch('fetchProducts'); // Fetch products
   await store.dispatch('fetchProductImages'); // Fetch one image per product
 });
 
-// Getters
 const products = computed(() => store.state.products || []);
 const loading = computed(() => store.state.loading);
 const error = computed(() => store.state.error);
 
-// Use the getProductImage getter
 const getProductImage = (productId) => {
-  return store.getters.getProductImage(productId); // Call the getter with productId
+  return store.getters.getProductImage(productId);
 };
 
-// Navigate to the product details page
 const goToProduct = async (productId) => {
   await store.dispatch('fetchProductGalleryImages', productId); // Fetch all images for the product
-  router.push(`/product/${productId}`); // Navigate to the product details page
+  router.push(`/product/${productId}`);
 };
 </script>
-
 
 
 <style scoped>

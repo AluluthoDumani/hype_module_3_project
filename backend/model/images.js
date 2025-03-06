@@ -2,18 +2,16 @@
 import { pool } from '../config/config.js';
 
 // Getting all product images
+// Fetch all images for each product
 export const getAllProductImages = async () => {
   try {
     const [data] = await pool.query(`
-      SELECT 
+      SELECT
         pi.product_id,
-        MIN(pi.URLs) AS image_url  -- Ensure 'url' matches your DB column
-      FROM 
+        pi.URLs AS image_url
+      FROM
         product_images pi
-      GROUP BY 
-        pi.product_id
-    `); // Removed incorrect semicolon inside backticks
-
+    `);
     return data;
   } catch (error) {
     console.error('Error fetching product images:', error);

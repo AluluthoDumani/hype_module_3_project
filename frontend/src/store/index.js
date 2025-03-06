@@ -55,7 +55,7 @@ const store = createStore({
       try {
         const response = await fetch('http://localhost:3500/products');
         const data = await response.json();
-
+        console.log('Fetched products:', data.products); // Log the fetched products
         if (Array.isArray(data.products)) {
           commit('setProducts', data.products);
         } else {
@@ -67,52 +67,46 @@ const store = createStore({
       } finally {
         commit('setLoading', false);
       }
-    },
-    async fetchProductImages({ commit }) {
-      commit('setLoading', true);
-      try {
-        const response = await fetch('http://localhost:3500/images');
-        const data = await response.json();
-        console.log('Fetched product images:', data); // ✅ Check the data
     
-        if (Array.isArray(data)) {
-          // Filter to store only one image per product
-          const uniqueProductImages = [];
-          const productIds = new Set(); // Track product IDs to avoid duplicates
-    
-          data.forEach((image) => {
-            if (!productIds.has(image.product_id)) {
-              productIds.add(image.product_id);
-              uniqueProductImages.push(image); // ✅ Only one per product
-            }
-          });
-    
-          commit('setProductImages', uniqueProductImages);
-        }
-      } catch (error) {
-        commit('setError', error.message || 'Failed to fetch product images');
-        console.error('Error fetching product images:', error.message);
-      } finally {
-        commit('setLoading', false);
-      }
-    },
-    async fetchProductGalleryImages({ commit }, productId) {
-      commit('setLoading', true);
-      try {
-        const response = await fetch(`http://localhost:3500/images/${productId}`);
-        const data = await response.json();
+  },
 
-        if (Array.isArray(data)) {
-          commit('setProductGalleryImages', data);
-        } else {
-          throw new Error(data.error || 'Invalid data format');
+
+      async fetchProductImages({ commit }) {
+        commit('setLoading', true);
+        try {
+          const response = await fetch('http://localhost:3500/images');
+          const data = await response.json();
+          console.log('Fetched product images:', data); // Log the fetched images
+          if (Array.isArray(data.ProductImages)) {
+            commit('setProductImages', data.ProductImages);
+          } else {
+            throw new Error(data.error || 'Invalid data format');
+          }
+        } catch (error) {
+          commit('setError', error.message || 'Failed to fetch product images');
+          console.error('Error fetching product images:', error.message);
+        } finally {
+          commit('setLoading', false);
         }
-      } catch (error) {
-        commit('setError', error.message || 'Failed to fetch product gallery images');
-        console.error('Error fetching product gallery images:', error.message);
-      } finally {
-        commit('setLoading', false);
-      }
+
+    },
+      async fetchProductGalleryImages({ commit }, productId) {
+        commit('setLoading', true);
+        try {
+          const response = await fetch(`http://localhost:3500/images/${productId}`);
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            commit('setProductGalleryImages', data);
+          } else {
+            throw new Error(data.error || 'Invalid data format');
+          }
+        } catch (error) {
+          commit('setError', error.message || 'Failed to fetch product gallery images');
+          console.error('Error fetching product gallery images:', error.message);
+        } finally {
+          commit('setLoading', false);
+        }
+     
     },
     addToCart({ commit }, product) {
       console.log('Dispatching addToCart:', product);
@@ -134,10 +128,17 @@ const store = createStore({
     error: (state) => state.error,
     cartTotal: (state) => state.cart.reduce((total, item) => total + item.price * item.quantity, 0),
     // Define the getProductImage getter as a function
-    getProductImage: (state) => (productId) => {
-      const image = state.productImages.find(img => img.product_id == productId); // Use `==` for loose comparison
-      return image ? image.URLs : require('@/assets/images/hype.png'); // Fallback image
-    },
+
+
+      getProductImage: (state) => (productId) => {
+        console.log('Product ID:', productId); // Log the product ID
+        console.log('Product Images:', state.productImages); // Log the product images
+        const image = state.productImages.find(img => img.product_id == productId);
+        console.log('Found Image:', image); // Log the found image
+        return image ? image.image_url : require('@/assets/images/hype.png'); // Fallback image
+      },
+
+    
   },
 });
 
