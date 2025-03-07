@@ -382,7 +382,7 @@ h2 {
 
 /* Modal Content */
 .modal {
-  background-color: black;
+  background-color: white; /* Changed from black */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -391,7 +391,13 @@ h2 {
 }
 
 .modal h2 {
+  color: #333; /* Add text color */
   margin-bottom: 10px;
+}
+
+.modal p {
+  color: #666; /* Add text color */
+  margin-bottom: 15px;
 }
 
 .modal button {

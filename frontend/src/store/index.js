@@ -175,6 +175,38 @@ const store = createStore({
         throw error;
       }
     },
+    
+      async addToCart({ commit, dispatch }, product) {
+        try {
+          // Optimistic UI update
+          commit('addToCart', product);
+          
+          // API call to backend
+          const token = localStorage.getItem('token');
+          await fetch('http://localhost:3500/api/cart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ 
+              product_id: product.product_id, 
+              quantity: 1 
+            })
+          });
+          
+          // Sync with server
+          await dispatch('fetchCart');
+          
+        } catch (error) {
+          console.error('Add to cart error:', error);
+          // Rollback on error
+          commit('removeFromCart', product.product_id);
+          throw error;
+        }
+      },
+    
+
 
     async login({ commit }, { email, password }) {
       try {
@@ -195,7 +227,7 @@ const store = createStore({
       }
     },
 
-    
+
 
     logout({ commit }) {
       commit('logout');
