@@ -12,6 +12,7 @@ const router = express.Router();
 // Get cart items for a user
 router.get('/', getCartCon);
 
+
 // Add item to cart
 router.post('/', addItemToCartCon);
 

@@ -6,10 +6,12 @@ import {
     checkout,
 } from '../model/cart.js';
 
+
+
 // Get cart items for a user
 export const getCartCon = async (req, res) => {
     try {
-        const user_id = req.user.id; // Assuming you have user authentication
+        const user_id = req.user_id; // Assuming you have user authentication
         const cartItems = await getCartItems(user_id);
         res.json({ cartItems });
     } catch (error) {

@@ -12,6 +12,8 @@ import users from "./routes/usersRoutes.js"
 import cart from "./routes/cartRoutes.js"
 import checkout from "./routes/checkoutRoutes.js"
 import images from "./routes/images.js"
+
+import login from "./routes/authRouter.js"
 import cors from 'cors'
 import { config } from 'dotenv'
 config()
@@ -27,13 +29,13 @@ app.use('/order_details',orderDetails)
 app.use('/adresses',adress)
 app.use('/orders',orders)
 app.use('/payments',payment)
+app.use ('/login',login)
 app.use('/saved_items', wishlist)
 app.use('/products',products)
 app.use ('/users',users)
 app.use('/cart', cart)
 app.use('/checkouts', checkout)
 app.use('/images', images)
-
 app.listen(PORT,()=>{
     console.log('http://localhost:' + PORT);
 })
