@@ -30,6 +30,22 @@ const store = createStore({
     setError(state, error) {
       state.error = error;
     },
+
+    addToCart(state, product) {
+      const existingItem = state.cart.find(item => item.product_id === product.product_id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.cart.push({
+          cart_id: `temp-${Date.now()}`,
+          product_id: product.product_id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          image: product.image || fallbackImage
+        });
+      }
+    },
     setCart(state, cartItems) {
       state.cart = cartItems.map(item => ({
         cart_id: item.id,
@@ -122,6 +138,7 @@ const store = createStore({
         console.error('Remove item error:', error);
       }
     },
+    
 
     async updateQuantity({ dispatch }, { cart_id, quantity }) {
       try {
@@ -177,6 +194,8 @@ const store = createStore({
         throw error;
       }
     },
+
+    
 
     logout({ commit }) {
       commit('logout');
