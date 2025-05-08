@@ -89,8 +89,15 @@ const goToProduct = async (productId) => {
 
 <style scoped>
   .home {
+    color: #F5F5F5;
+    display: flex;
+    flex-direction: column;
     text-align: center;
     padding: 50px;
+    background-image: url('@/assets/images/heroimage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .shop-btn {
     background: #ff4500;
